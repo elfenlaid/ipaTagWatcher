@@ -8,7 +8,7 @@ import qualified System.Directory as SD
 
 import Data.Char (isAlpha, isSpace)
 import Data.Text (pack, unpack)
-import Data.Time (formatTime, getCurrentTime)
+import Data.Time (formatTime, getCurrentTime, utcToLocalZonedTime)
 import System.Locale (defaultTimeLocale)
 
 import Data.Maybe (fromMaybe)
@@ -61,7 +61,7 @@ ipaTagAction e = do
           SD.copyFile (pathToString path) (pathToString taggedPath)
   
 timeTag :: IO String
-timeTag = fmap formatter getCurrentTime
+timeTag = fmap formatter $ getCurrentTime >>= utcToLocalZonedTime
   where formatter = formatTime defaultTimeLocale "(%Y-%m-%d__%H-%M)" 
 
 appendTag :: FPC.FilePath -> String -> FPC.FilePath
